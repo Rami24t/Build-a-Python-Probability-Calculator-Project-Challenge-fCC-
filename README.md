@@ -29,17 +29,17 @@ The experiment function should return a probability.
 For example, if you want to determine the probability of getting at least two red balls and one green ball when you draw five balls from a hat containing six black, four red, and three green. To do this, you will perform N experiments, count how many times M you get at least two red balls and one green ball, and estimate the probability as M/N. Each experiment consists of starting with a hat containing the specified balls, drawing several balls, and checking if you got the balls you were attempting to draw.
 
 Here is how you would call the experiment function based on the example above with 2000 experiments:
-
+```
 hat = Hat(black=6, red=4, green=3)
 probability = experiment(hat=hat,
                   expected_balls={"red":2,"green":1},
                   num_balls_drawn=5,
                   num_experiments=2000)
-
+```
 The output would be something like this:
-
+```
 0.356
-
+```
 Since this is based on random draws, the probability will be slightly different each time the code is run.
 
 Hint: Consider using the modules that are imported at the top. Do not initialize random seed within the file.
