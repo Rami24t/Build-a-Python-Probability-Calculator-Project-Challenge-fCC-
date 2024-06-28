@@ -4,7 +4,7 @@ import random
 
 class Hat():
     def __init__(self, **kwargs):
-        self.count = kwargs
+        self.count = kwargs.copy()
         self.contents = Counter.spread(**kwargs)
 
     def __str__(self):
@@ -15,8 +15,8 @@ class Hat():
         removedBalls = []
         if num_balls_drawn >= len(self.contents):
             removedBalls = self.contents.copy()
+            self.contents.clear()
             self.count = dict.fromkeys(self.count, 0)
-            self.contents=[]
         else:
              for _ in range(num_balls_drawn):
                  removedBalls.append(self.contents.pop(random.randint(0,len(self.contents)-1)))
@@ -24,12 +24,14 @@ class Hat():
         return removedBalls
 
 class Counter():
+    @staticmethod
     def spread(**kwargs):
         spread_contents = []
         for key, value in kwargs.items():
             for _ in range(value):
                 spread_contents.append(key)
         return spread_contents
+    @staticmethod
     def count(spread):
         count = {}
         for item in spread:
@@ -44,9 +46,9 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
     counter = 0
     for _ in range(num_experiments):
         draw = Counter.count(copy.deepcopy(hat).draw(num_balls_drawn))
-        if expected_balls.items() <= draw.items():
+        if all(draw.get(ball, 0) >= count for ball, count in expected_balls.items()):
             counter += 1
-        print(f'{_+1}-{counter}: {draw}')
+        # print(f'{_+1}-{counter}: {draw}')
     return counter/num_experiments
 
 
