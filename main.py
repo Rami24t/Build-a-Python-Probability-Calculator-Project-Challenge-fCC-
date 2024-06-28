@@ -11,18 +11,17 @@ class Hat():
         params = ', '.join(f"{color}={self.count[color]}" for color in self.count)
         return f"{type(self).__name__}({params})"
 
-    def draw(self, n):
-        removedItems = []
-        if n >= len(self.contents):
-            removedItems = self.contents
+    def draw(self, num_balls_drawn):
+        removedBalls = []
+        if num_balls_drawn >= len(self.contents):
+            removedBalls = self.contents.copy()
             self.count = dict.fromkeys(self.count, 0)
+            self.contents=[]
         else:
-            removedItems = [
-            self.contents.pop(random.randint(0,len(self.contents)-1)) for i in range(n)
-        ]
-            for removedItem in removedItems:
-                self.count[removedItem] -= 1
-        return removedItems
+             for _ in range(num_balls_drawn):
+                 removedBalls.append(self.contents.pop(random.randint(0,len(self.contents)-1)))
+                 self.count[removedBalls[-1]] -= 1
+        return removedBalls
 
 class Counter():
     def spread(**kwargs):
@@ -31,18 +30,24 @@ class Counter():
             for _ in range(value):
                 spread_contents.append(key)
         return spread_contents
-    # def count(spread):
-    #     count = {}
-    #    for item in spread:
-    #        if item not in count:
-    #            count[str(item)] = 1
-    #        else:
-    #            count[item] += 1
-    #    return count
+    def count(spread):
+        count = {}
+        for item in spread:
+            if item not in count:
+                count[str(item)] = 1
+            else:
+                    count[item] += 1
+        return count
 
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
-    return
+    counter = 0
+    for _ in range(num_experiments):
+        draw = Counter.count(copy.deepcopy(hat).draw(num_balls_drawn))
+        if expected_balls.items() <= draw.items():
+            counter += 1
+        print(f'{_+1}-{counter}: {draw}')
+    return counter/num_experiments
 
 
 if __name__=='__main__':
@@ -54,9 +59,8 @@ if __name__=='__main__':
     print('hat3: ', hat3)
     print('Draw 5 random balls from hat3: ', hat3.draw(5))
     print('hat3: ', hat3)
-    print('-------------------')
-    print(f'experiment(hat3, {{"blue":2, "red":1)}}, 3, 9) result: {experiment(hat3, {"blue":2, "red":1}, 3, 9)}\n-------------------')
-    hat4 = Hat(black=6, red=4, green=3)
-    probability = experiment(hat=hat4, expected_balls={"red":2,"green":1},
-    num_balls_drawn=5, num_experiments=2000)
-    print(f'The probability of getting 2 red and 1 green balls from {hat4} is estimated to be {probability} after based on the results of 2000 experiments)')
+    print('--------------------\n')
+    hat4 = Hat(black=2, red=1, green=3)
+    probability = experiment(hat=hat4, expected_balls={"red":1,"green":1},
+    num_balls_drawn=3, num_experiments=2000)
+    print(f'The probability of getting 1 red and 1 green balls from drawing 3 balls from {hat4} is estimated to be {probability} based on the results of 2000 experiments)')
