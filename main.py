@@ -11,6 +11,10 @@ class Hat():
         params = ', '.join(f"{color}={self.count[color]}" for color in self.count)
         return f"{type(self).__name__}({params})\n"
 
+    def draw(self):
+        removedItem = self.contents.pop(random.randint(0,len(self.contents)-1))
+        self.count[removedItem] -= 1
+        return self.contents
 
 class Counter():
     def spread(**kwargs):
@@ -37,4 +41,9 @@ if __name__=='__main__':
     hat1 = Hat(yellow=3, blue=2, green=6)
     hat2 = Hat(red=5, orange=4)
     hat3 = Hat(red=5, orange=4, black=1, blue=0, pink=2, striped=9)
-    print(str(hat1), '\n'+str(hat2), '\n'+str(hat3))
+    print(str(hat1), '\n'+str(hat2), '\n'+str(hat3))    
+    hat3.draw()
+    hat3.draw()
+    hat3.draw()
+    hat3.draw()
+    print(hat3)
