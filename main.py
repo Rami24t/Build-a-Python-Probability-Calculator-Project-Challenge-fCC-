@@ -42,15 +42,21 @@ class Counter():
 
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
-    pass
+    return
 
 
 if __name__=='__main__':
     hat1 = Hat(yellow=3, blue=2, green=6)
     hat2 = Hat(red=5, orange=4)
-    print('hat1:  '+str(hat1)+'\nhat2:  '+str(hat2)+'\n------------------------------------\n')
+    print('hat1:  '+str(hat1)+'\nhat2:  '+str(hat2)+'\n-------------------\n')
 
     hat3 = Hat(red=5, orange=4, black=1, blue=0, pink=2, striped=9)
     print('hat3: ', hat3)
     print('Draw 5 random balls from hat3: ', hat3.draw(5))
     print('hat3: ', hat3)
+    print('-------------------')
+    print(f'experiment(hat3, {{"blue":2, "red":1)}}, 3, 9) result: {experiment(hat3, {"blue":2, "red":1}, 3, 9)}\n-------------------')
+    hat4 = Hat(black=6, red=4, green=3)
+    probability = experiment(hat=hat4, expected_balls={"red":2,"green":1},
+    num_balls_drawn=5, num_experiments=2000)
+    print(f'The probability of getting 2 red and 1 green balls from {hat4} is estimated to be {probability} after based on the results of 2000 experiments)')
