@@ -3,13 +3,15 @@ import random
 
 class Hat():
     def __init__(self, **kwargs):
+        self.kwargs = kwargs
         self.contents = []
         for key, value in kwargs.items():
             for _ in range(value):
                 self.contents.append(key)
 
     def __str__(self):
-        return f"{vars(self)}\n"
+        params = ', '.join(f"{color}={self.kwargs[color]}" for color in self.kwargs)
+        return f"{type(self).__name__}({params})\n"
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
     pass
