@@ -3,20 +3,42 @@ import random
 
 
 class Hat():
-    # Constructs and initializes a Hat instance. Takes a variable number of arguments that specify the count of each color of balls that are in the hat
+    """
+    Represents a hat containing colored balls.
+    """
+
+    # Constructs and initializes a Hat instance. Takes a variable number of arguments that specify the colors of the balls and the number of each
     def __init__(self, **kwargs):
+        """
+        Initializes a Hat instance with a specified count of balls of each color.
+        
+        Args:
+            kwargs: Variable length keyword arguments representing the count of balls of each color.
+        """
         # self.count will store a dictionary with the colors as the keys and counts as the values
         self.count = kwargs.copy()
         # The arguments passed into the hat object upon creation are converted to a contents instance variable which will be a list of strings containing one item for each ball in the hat
         self.contents = Counter.spread(**kwargs)
 
-    # Returns a string representation of the hat object
     def __repr__(self):
+        """
+        Returns:
+            str: A string representation of the Hat instance.
+        """
         params = ', '.join(f"{color}={self.count[color]}" for color in self.count)
         return f"{type(self).__name__}({params})"
     
-    # Accepts an argument indicating the number of balls to draw from the hat. Removes balls at random from contents and returns removed balls as a list of strings
+    # Removes balls at random from contents
     def draw(self, num_balls_drawn):
+        """
+        Draws out a specified number of balls from the hat.
+        
+        Args:
+            num_balls_drawn (int): The number of balls to draw out from the hat.
+        
+        Returns:
+            list: A list of strings representing the drawn out (removed) balls.
+        """
         removedBalls = []
         if num_balls_drawn >= len(self.contents):
             removedBalls = self.contents.copy()
@@ -28,17 +50,38 @@ class Hat():
                  self.count[removedBalls[-1]] -= 1
         return removedBalls
 
-# A helper class: Used by the Hat class to handle count-to-list and list-to-count conversions
 class Counter():
-    # The spread class method converts any number of string = count key word arguments into a list of strings: for example: Counter.spread(r=1,s=2) will return: ['r', 's', 's']
+    """
+    A helper class for handling count-to-list and list-to-count conversions.
+    """
+    @staticmethod
     def spread(**kwargs):
+        """
+        Converts any number of string=count keyword arguments into a list of strings: for example: Counter.spread(r=1,s=2) will return: ['r', 's', 's']
+
+        Args:
+            kwargs: Variable length keyword arguments representing the count of each string. example: r=1,s=2
+        
+        Returns:
+            list: A list containing count X of each string. example: ['r', 's', 's']
+        """
         spread_contents = []
         for key, value in kwargs.items():
             for _ in range(value):
                 spread_contents.append(key)
         return spread_contents
-    # Converts a list of strings into a {string:count} dict. Example: Counter.count(['r','a','m','i','a','a','a','i']) will return: {'r': 1, 'a': 4, 'm': 1, 'i': 2}
+
+    @staticmethod
     def count(spread):
+        """
+        Converts a list of strings into a dictionary with counts. {string:count}. Example: Counter.count(['r','a','m','i','a','a','a','i']) will return: {'r': 1, 'a': 4, 'm': 1, 'i': 2}
+        
+        Args:
+            spread (list): A list of strings.
+        
+        Returns:
+            dict: A dictionary with counts of each string. {string:count, ...}
+        """
         count = {}
         for item in spread:
             if item not in count:
@@ -47,8 +90,20 @@ class Counter():
                     count[item] += 1
         return count
 
-# The experiment function takes in 4 parameters: (A hat, the expected balls {"color":count, ...}, the number of balls to draw out each time, and the total number of experiments) and returns the approximate probability resulting from the performed experiments
+# The experiment function takes in 4 parameters and returns the approximate probability resulting from the performed experiments
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+    """
+    Conducts an experiment to determine the probability of drawing the expected balls from the hat.
+    
+    Args:
+        hat (Hat): The hat object containing the balls.
+        expected_balls (dict): A dictionary representing the expected count of each color of balls. {"color":count, ...}
+        num_balls_drawn (int): The number of balls to draw out from the hat each time.
+        num_experiments (int): The total number of experiments to perform.
+    
+    Returns:
+        float: The approximate probability of drawing the expected balls
+    """
     # Define and initialize success_counter variable to count the number of successful experiments
     success_counter = 0
     # do num_experiments experiments
