@@ -57,7 +57,7 @@ class Counter():
     @staticmethod
     def spread(**kwargs):
         """
-        Converts any number of string=count keyword arguments into a list of strings: for example: Counter.spread(r=1,s=2) will return: ['r', 's', 's']
+        Converts any number of value-count keyword argument pairs into a list based on the count associated with each key.For example: Counter.spread(r=1,s=2) will return: ['r', 's', 's']. Flattens a dictionary's key-value pairs into a list.
 
         Args:
             kwargs: Variable length keyword arguments representing the count of each string. example: r=1,s=2
@@ -65,11 +65,13 @@ class Counter():
         Returns:
             list: A list containing count X of each string. example: ['r', 's', 's']
         """
-        spread_contents = []
-        for key, value in kwargs.items():
-            for _ in range(value):
-                spread_contents.append(key)
-        return spread_contents
+        return [key for key, count in kwargs.items() for _ in range(count)] 
+        # similar to:
+        #spread_contents = []
+        #for key, count in kwargs.items():
+            #for _ in range(count):
+                #spread_contents.append(key)
+        #return spread_contents
 
     @staticmethod
     def count(spread):
@@ -84,10 +86,13 @@ class Counter():
         """
         count = {}
         for item in spread:
-            if item not in count:
-                count[str(item)] = 1
-            else:
-                    count[item] += 1
+            #  update the count of occurrences
+            count[item] = count.get(item, 0) + 1
+            # similar to:
+            # if item in count:
+            #    count[item] = count[item] + 1
+            # else:
+            #    count[item] = 0 + 1
         return count
 
 # The experiment function takes in 4 parameters and returns the approximate probability resulting from the performed experiments
